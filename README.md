@@ -17,10 +17,10 @@ npm run dev
 - Desk API: http://127.0.0.1:4000
 - Fraud-DESK: http://127.0.0.1:5173
 
-`model.json` is already trained. The PaySim training file stays on your machine. To refit the model:
+`model.json` is already trained. The PaySim log is in `data/` as six equal parts, about 82MB each, because the original file is 493MB and GitHub rejects files over 100MB. Each part has the header row. Together they are the full log, 6,362,620 transactions. To refit the model:
 
 ```bash
-.venv/bin/python train.py /path/to/PS_20174392719_1491204439457_log.csv
+.venv/bin/python train.py data
 ```
 
 ## Docker
