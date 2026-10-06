@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "scorer": ".venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000",
+    "api": "npm run dev -w server",
+    "web": "npm run dev -w web",
+    "dev": "concurrently -n scorer,api,web -c blue,green,magenta \"npm run scorer\" \"npm run api\" \"npm run web\"",
+    "e2e:api": "node --test tests/e2e/api.test.mjs",
+    "e2e:ui": "playwright test",
+    "e2e": "npm run e2e:api && npm run e2e:ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "concurrently": "^9.2.0"
+  }
+}

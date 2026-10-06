@@ -1,0 +1,76 @@
+# One replica only. Cases live in SQLite, which cannot be shared across pods.
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: fraud-desk
+spec:
+  selector:
+    app: api
+  ports:
+    - name: http
+      port: 4000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: api
+  namespace: fraud-desk
+spec:
+  serviceName: api
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: api
+          image: fraud-desk-api:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 4000
+          env:
+            - name: PORT
+              value: "4000"
+            - name: SCORER_URL
+              value: http://scorer:8000
+          volumeMounts:
+            - name: cases
+              mountPath: /app/data
+          startupProbe:
+            httpGet:
+              path: /api/live
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /api/live
+              port: http
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 256Mi
+  volumeClaimTemplates:
+    - metadata:
+        name: cases
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

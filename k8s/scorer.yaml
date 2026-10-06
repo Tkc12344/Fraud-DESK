@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scorer
+  namespace: fraud-desk
+  labels:
+    app: scorer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scorer
+  template:
+    metadata:
+      labels:
+        app: scorer
+    spec:
+      containers:
+        - name: scorer
+          image: fraud-desk-scorer:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scorer
+  namespace: fraud-desk
+spec:
+  selector:
+    app: scorer
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

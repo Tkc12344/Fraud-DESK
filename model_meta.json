@@ -1,0 +1,38 @@
+{
+  "features": [
+    "is_transfer",
+    "log_amount",
+    "oldbalanceOrg",
+    "oldbalanceDest",
+    "drains_account",
+    "amount_ratio",
+    "dest_empty",
+    "hour"
+  ],
+  "metrics": {
+    "pr_auc": 0.9999832725060828,
+    "test_rows": 43550,
+    "test_fraud": 1600,
+    "test_fraud_rate": 0.03673938002296211,
+    "thr_0.1": {
+      "precision": 1.0,
+      "recall": 0.999375,
+      "alerts": 1599
+    },
+    "thr_0.3": {
+      "precision": 1.0,
+      "recall": 0.999375,
+      "alerts": 1599
+    },
+    "thr_0.5": {
+      "precision": 1.0,
+      "recall": 0.99875,
+      "alerts": 1598
+    },
+    "thr_0.8": {
+      "precision": 1.0,
+      "recall": 0.9975,
+      "alerts": 1596
+    }
+  }
+}

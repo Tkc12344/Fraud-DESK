@@ -1,0 +1,8 @@
+.git
+.venv
+**/__pycache__
+**/node_modules
+server/data
+web/dist
+*.csv
+**/.DS_Store

@@ -1,0 +1,82 @@
+export const PRESETS = [
+  {
+    id: "drain",
+    label: "Full-balance transfer",
+    detail: "Amount equals the sender balance and the destination is empty.",
+    tx: {
+      step: 4,
+      type: "TRANSFER",
+      amount: 181000,
+      oldbalanceOrg: 181000,
+      oldbalanceDest: 0,
+      nameOrig: "C1305486145",
+      nameDest: "C553264065",
+    },
+  },
+  {
+    id: "cashout",
+    label: "Full-balance cash-out",
+    detail: "The sender withdraws every unit at an agent.",
+    tx: {
+      step: 1,
+      type: "CASH_OUT",
+      amount: 181,
+      oldbalanceOrg: 181,
+      oldbalanceDest: 21182,
+      nameOrig: "C840083671",
+      nameDest: "C38997010",
+    },
+  },
+  {
+    id: "large-empty",
+    label: "Large transfer, empty destination",
+    detail: "Over 200,000 into a zero-balance account, without draining the sender.",
+    tx: {
+      step: 12,
+      type: "TRANSFER",
+      amount: 250000,
+      oldbalanceOrg: 900000,
+      oldbalanceDest: 0,
+      nameOrig: "C1670993182",
+      nameDest: "C1100439041",
+    },
+  },
+  {
+    id: "payment",
+    label: "Merchant payment",
+    detail: "Payments had no fraud in training, so they skip the model.",
+    tx: {
+      step: 1,
+      type: "PAYMENT",
+      amount: 9839.64,
+      oldbalanceOrg: 170136,
+      oldbalanceDest: 0,
+      nameOrig: "C1231006815",
+      nameDest: "M1979787155",
+    },
+  },
+  {
+    id: "cashin",
+    label: "Cash-in",
+    detail: "Cash-in had no fraud in training, so it skips the model.",
+    tx: {
+      step: 1,
+      type: "CASH_IN",
+      amount: 143236.26,
+      oldbalanceOrg: 0,
+      oldbalanceDest: 608932.17,
+      nameOrig: "C1862994526",
+      nameDest: "C1688019098",
+    },
+  },
+];
+
+export const EMPTY_TX = {
+  step: 1,
+  type: "TRANSFER",
+  amount: "",
+  oldbalanceOrg: "",
+  oldbalanceDest: "",
+  nameOrig: "",
+  nameDest: "",
+};

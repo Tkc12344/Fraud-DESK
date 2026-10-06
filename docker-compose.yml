@@ -1,0 +1,46 @@
+services:
+  scorer:
+    build:
+      context: .
+      dockerfile: Dockerfile.scorer
+    image: fraud-desk-scorer:local
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    image: fraud-desk-api:local
+    environment:
+      PORT: "4000"
+      SCORER_URL: http://scorer:8000
+    volumes:
+      - cases:/app/data
+    depends_on:
+      scorer:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/api/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    image: fraud-desk-web:local
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  cases:

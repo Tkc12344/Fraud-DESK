@@ -1,0 +1,9 @@
+.venv/
+*.csv
+__pycache__/
+node_modules/
+server/data/
+web/dist/
+playwright-report/
+test-results/
+.DS_Store
